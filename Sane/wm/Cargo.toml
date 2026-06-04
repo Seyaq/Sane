@@ -1,0 +1,15 @@
+[package]
+name        = "wm"
+version.workspace   = true
+edition.workspace   = true
+authors.workspace   = true
+license.workspace   = true
+
+[[bin]]
+name = "wm"
+path = "src/wm.rs"
+
+[dependencies]
+spin.workspace     = true
+bitflags.workspace = true
+arrayvec.workspace = true

@@ -1,0 +1,148 @@
+warning: virtual workspace defaulting to `resolver = "1"` despite one or more workspace members being on edition 2021 which implies `resolver = "2"`
+  |
+  = note: to keep the current resolver, specify `workspace.resolver = "1"` in the workspace root's manifest
+  = note: to use the edition 2021 resolver, specify `workspace.resolver = "2"` in the workspace root's manifest
+  = note: for more details see https://doc.rust-lang.org/cargo/reference/resolver.html#resolver-versions
+   0.039888300s  INFO prepare_target{force=false package_id=kl v0.1.0 (C:\Users\Seyaq\Desktop\Sane\kl) target="kl"}: cargo::core::compiler::fingerprint: fingerprint error for kl v0.1.0 (C:\Users\Seyaq\Desktop\Sane\kl)/Check { test: false }/TargetInner { name: "kl", doc: true, ..: with_path("C:\\Users\\Seyaq\\Desktop\\Sane\\kl\\src\\kl.rs", Edition2021) }
+   0.041041500s  INFO prepare_target{force=false package_id=kl v0.1.0 (C:\Users\Seyaq\Desktop\Sane\kl) target="kl"}: cargo::core::compiler::fingerprint:     err: failed to read `C:\Users\Seyaq\Desktop\Sane\target\debug\.fingerprint\kl-0ed48a56f8a83718\bin-kl`
+
+Caused by:
+    Le fichier spécifié est introuvable. (os error 2)
+
+Stack backtrace:
+   0: git_midx_writer_dump
+   1: git_midx_writer_dump
+   2: git_midx_writer_dump
+   3: git_midx_writer_dump
+   4: git_filter_source_repo
+   5: git_filter_source_repo
+   6: git_filter_source_repo
+   7: git_filter_source_repo
+   8: git_filter_source_repo
+   9: git_filter_source_repo
+  10: git_filter_source_repo
+  11: git_libgit2_prerelease
+  12: <unknown>
+  13: <unknown>
+  14: <unknown>
+  15: <unknown>
+  16: git_midx_writer_dump
+  17: git_filter_source_repo
+  18: git_midx_writer_dump
+  19: BaseThreadInitThunk
+  20: RtlUserThreadStart
+   0.055466100s  INFO prepare_target{force=false package_id=spin v0.9.8 target="spin"}: cargo::core::compiler::fingerprint: fingerprint error for spin v0.9.8/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spin", ["lib"], "C:\\Users\\Seyaq\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\spin-0.9.8\\src\\lib.rs", Edition2015) }
+   0.055777800s  INFO prepare_target{force=false package_id=spin v0.9.8 target="spin"}: cargo::core::compiler::fingerprint:     err: failed to read `C:\Users\Seyaq\Desktop\Sane\target\debug\.fingerprint\spin-5a432554e062b68b\lib-spin`
+
+Caused by:
+    Le fichier spécifié est introuvable. (os error 2)
+
+Stack backtrace:
+   0: git_midx_writer_dump
+   1: git_midx_writer_dump
+   2: git_midx_writer_dump
+   3: git_midx_writer_dump
+   4: git_filter_source_repo
+   5: git_filter_source_repo
+   6: git_filter_source_repo
+   7: git_filter_source_repo
+   8: git_filter_source_repo
+   9: git_filter_source_repo
+  10: git_filter_source_repo
+  11: git_filter_source_repo
+  12: git_libgit2_prerelease
+  13: <unknown>
+  14: <unknown>
+  15: <unknown>
+  16: <unknown>
+  17: git_midx_writer_dump
+  18: git_filter_source_repo
+  19: git_midx_writer_dump
+  20: BaseThreadInitThunk
+  21: RtlUserThreadStart
+   0.057425400s  INFO prepare_target{force=false package_id=kl v0.1.0 (C:\Users\Seyaq\Desktop\Sane\kl) target="kl"}: cargo::core::compiler::fingerprint: fingerprint error for kl v0.1.0 (C:\Users\Seyaq\Desktop\Sane\kl)/Check { test: true }/TargetInner { name: "kl", doc: true, ..: with_path("C:\\Users\\Seyaq\\Desktop\\Sane\\kl\\src\\kl.rs", Edition2021) }
+   0.057476500s  INFO prepare_target{force=false package_id=kl v0.1.0 (C:\Users\Seyaq\Desktop\Sane\kl) target="kl"}: cargo::core::compiler::fingerprint:     err: failed to read `C:\Users\Seyaq\Desktop\Sane\target\debug\.fingerprint\kl-082c0ee463cb5039\test-bin-kl`
+
+Caused by:
+    Le fichier spécifié est introuvable. (os error 2)
+
+Stack backtrace:
+   0: git_midx_writer_dump
+   1: git_midx_writer_dump
+   2: git_midx_writer_dump
+   3: git_midx_writer_dump
+   4: git_filter_source_repo
+   5: git_filter_source_repo
+   6: git_filter_source_repo
+   7: git_filter_source_repo
+   8: git_filter_source_repo
+   9: git_filter_source_repo
+  10: git_filter_source_repo
+  11: git_libgit2_prerelease
+  12: <unknown>
+  13: <unknown>
+  14: <unknown>
+  15: <unknown>
+  16: git_midx_writer_dump
+  17: git_filter_source_repo
+  18: git_midx_writer_dump
+  19: BaseThreadInitThunk
+  20: RtlUserThreadStart
+   0.058045000s  INFO prepare_target{force=false package_id=wm v0.1.0 (C:\Users\Seyaq\Desktop\Sane\wm) target="wm"}: cargo::core::compiler::fingerprint: fingerprint error for wm v0.1.0 (C:\Users\Seyaq\Desktop\Sane\wm)/Check { test: false }/TargetInner { name: "wm", doc: true, ..: with_path("C:\\Users\\Seyaq\\Desktop\\Sane\\wm\\src\\wm.rs", Edition2021) }
+   0.058108500s  INFO prepare_target{force=false package_id=wm v0.1.0 (C:\Users\Seyaq\Desktop\Sane\wm) target="wm"}: cargo::core::compiler::fingerprint:     err: failed to read `C:\Users\Seyaq\Desktop\Sane\target\debug\.fingerprint\wm-02c011341ff66cc2\bin-wm`
+
+Caused by:
+    Le fichier spécifié est introuvable. (os error 2)
+
+Stack backtrace:
+   0: git_midx_writer_dump
+   1: git_midx_writer_dump
+   2: git_midx_writer_dump
+   3: git_midx_writer_dump
+   4: git_filter_source_repo
+   5: git_filter_source_repo
+   6: git_filter_source_repo
+   7: git_filter_source_repo
+   8: git_filter_source_repo
+   9: git_filter_source_repo
+  10: git_filter_source_repo
+  11: git_libgit2_prerelease
+  12: <unknown>
+  13: <unknown>
+  14: <unknown>
+  15: <unknown>
+  16: git_midx_writer_dump
+  17: git_filter_source_repo
+  18: git_midx_writer_dump
+  19: BaseThreadInitThunk
+  20: RtlUserThreadStart
+   0.058676500s  INFO prepare_target{force=false package_id=wm v0.1.0 (C:\Users\Seyaq\Desktop\Sane\wm) target="wm"}: cargo::core::compiler::fingerprint: fingerprint error for wm v0.1.0 (C:\Users\Seyaq\Desktop\Sane\wm)/Check { test: true }/TargetInner { name: "wm", doc: true, ..: with_path("C:\\Users\\Seyaq\\Desktop\\Sane\\wm\\src\\wm.rs", Edition2021) }
+   0.058725800s  INFO prepare_target{force=false package_id=wm v0.1.0 (C:\Users\Seyaq\Desktop\Sane\wm) target="wm"}: cargo::core::compiler::fingerprint:     err: failed to read `C:\Users\Seyaq\Desktop\Sane\target\debug\.fingerprint\wm-1d258b213e6a48f9\test-bin-wm`
+
+Caused by:
+    Le fichier spécifié est introuvable. (os error 2)
+
+Stack backtrace:
+   0: git_midx_writer_dump
+   1: git_midx_writer_dump
+   2: git_midx_writer_dump
+   3: git_midx_writer_dump
+   4: git_filter_source_repo
+   5: git_filter_source_repo
+   6: git_filter_source_repo
+   7: git_filter_source_repo
+   8: git_filter_source_repo
+   9: git_filter_source_repo
+  10: git_filter_source_repo
+  11: git_libgit2_prerelease
+  12: <unknown>
+  13: <unknown>
+  14: <unknown>
+  15: <unknown>
+  16: git_midx_writer_dump
+  17: git_filter_source_repo
+  18: git_midx_writer_dump
+  19: BaseThreadInitThunk
+  20: RtlUserThreadStart
+    Checking spin v0.9.8
+error: could not compile `spin` (lib) due to 1 previous error

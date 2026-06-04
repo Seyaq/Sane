@@ -1,0 +1,31 @@
+[package]
+name        = "kl"
+version.workspace   = true
+edition.workspace   = true
+authors.workspace   = true
+license.workspace   = true
+
+[[bin]]
+name = "kl"
+path = "src/kl.rs"
+
+[features]
+default   = ["iommu", "amd-zen", "intel-core"]
+iommu     = []
+amd-zen   = []
+intel-core = []
+gaming    = []
+
+[dependencies]
+spin.workspace     = true
+bitflags.workspace = true
+arrayvec.workspace = true
+static_assertions.workspace = true
+
+[build-dependencies]
+
+
+[package.metadata.kernel]
+target     = "x86_64-unknown-none"
+linker     = "rust-lld"
+boot       = "limine"
