@@ -1,3 +1,2 @@
 # Sane
-========================================
-[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/5003/badge)](https://bestpractices.coreinfrastructure.org/projects/5003)
+[![Writing an OS In Rust](https://bestpractices.coreinfrastructure.org/projects/5003/badge)]https://os.phil-opp.com/)
