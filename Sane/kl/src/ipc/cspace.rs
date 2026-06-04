@@ -1,55 +1,107 @@
+
+use core::sync::atomic::{AtomicUsize, Ordering};
 use spin::Mutex;
 
 const CSPACE_SIZE: usize = 65536;
 
-#[derive(Clone, Copy, PartialEq, Debug)]
-pub enum CapKind { Null, Endpoint, Memory, Irq, Thread, Notification }
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum CapKind {
+    Null,
+    Endpoint,
+    Memory,
+    Irq,
+    Thread,
+    Notification,
+}
 
 #[derive(Clone, Copy, Debug)]
 pub struct Capability {
-    pub kind:   CapKind,
+    pub kind: CapKind,
     pub object: u64,
-    pub badge:  u32,
+    pub badge: u32,
     pub rights: u8,
 }
 
-impl Default for Capability {
-    fn default() -> Self { Self { kind: CapKind::Null, object: 0, badge: 0, rights: 0 } }
+#[derive(Clone, Copy, Debug)]
+pub enum Slot {
+    Free { next_free: Option<u32> },
+    Occupied(Capability),
 }
 
-static CSPACE:    Mutex<[Capability; CSPACE_SIZE]> = Mutex::new(
-    [Capability { kind: CapKind::Null, object: 0, badge: 0, rights: 0 }; CSPACE_SIZE]
-);
-static mut NEXT_SLOT: u32 = 1;
+impl Default for Slot {
+    fn default() -> Self {
+        Slot::Free { next_free: None }
+    }
+}
+
+struct CSpaceManager {
+    slots: [Slot; CSPACE_SIZE],
+    first_free: Option<u32>,
+    next_unallocated: usize,
+}
+
+static CSPACE: Mutex<CSpaceManager> = Mutex::new(CSpaceManager {
+    slots: [Slot::Free { next_free: None }; CSPACE_SIZE],
+    first_free: None,
+    next_unallocated: 1,
+});
 
 pub fn init() {}
 
 pub fn install(slot: u32, cap: Capability) -> bool {
-    if slot as usize >= CSPACE_SIZE { return false; }
+    if slot as usize >= CSPACE_SIZE || slot == 0 { return false; }
+    if cap.kind == CapKind::Null { return false; }
+    
     let mut cs = CSPACE.lock();
-    if cs[slot as usize].kind != CapKind::Null { return false; }
-    cs[slot as usize] = cap;
-    true
+    match cs.slots[slot as usize] {
+        Slot::Free { .. } => {
+            cs.slots[slot as usize] = Slot::Occupied(cap);
+            true
+        }
+        Slot::Occupied(_) => false,
+    }
 }
 
 pub fn alloc(cap: Capability) -> Option<u32> {
-    let slot = unsafe {
-        if NEXT_SLOT as usize >= CSPACE_SIZE { return None; }
-        let s = NEXT_SLOT; NEXT_SLOT += 1; s
+    if cap.kind == CapKind::Null { return None; }
+    
+    let mut cs = CSPACE.lock();
+    let slot_idx = if let Some(free_idx) = cs.first_free {
+        if let Slot::Free { next_free } = cs.slots[free_idx as usize] {
+            cs.first_free = next_free;
+            free_idx
+        } else {
+            return None;
+        }
+    } else if cs.next_unallocated < CSPACE_SIZE {
+        let unallocated_idx = cs.next_unallocated as u32;
+        cs.next_unallocated += 1;
+        unallocated_idx
+    } else {
+        return None;
     };
-    install(slot, cap);
-    Some(slot)
+
+    cs.slots[slot_idx as usize] = Slot::Occupied(cap);
+    Some(slot_idx)
 }
 
 #[inline]
 pub fn lookup(cptr: u32) -> Option<Capability> {
-    if cptr as usize >= CSPACE_SIZE { return None; }
+    if cptr as usize >= CSPACE_SIZE || cptr == 0 { return None; }
+    
     let cs = CSPACE.lock();
-    let cap = cs[cptr as usize];
-    if cap.kind == CapKind::Null { None } else { Some(cap) }
+    match cs.slots[cptr as usize] {
+        Slot::Occupied(cap) => Some(cap),
+        Slot::Free { .. } => None,
+    }
 }
 
 pub fn delete(cptr: u32) {
-    if cptr as usize >= CSPACE_SIZE { return; }
-    CSPACE.lock()[cptr as usize] = Capability::default();
+    if cptr as usize >= CSPACE_SIZE || cptr == 0 { return; }
+    
+    let mut cs = CSPACE.lock();
+    if let Slot::Occupied(_) = cs.slots[cptr as usize] {
+        cs.slots[cptr as usize] = Slot::Free { next_free: cs.first_free };
+        cs.first_free = Some(cptr);
+    }
 }
