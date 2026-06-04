@@ -1,2 +1,3 @@
 # Sane
-I don't wanted to explain what is this , experts will understand
+# ========================================
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/5003/badge)](https://bestpractices.coreinfrastructure.org/projects/5003)
