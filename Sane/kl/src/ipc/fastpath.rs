@@ -10,10 +10,18 @@ pub struct MsgRegs {
 }
 
 #[derive(Clone, Copy, Debug)]
-pub enum IpcResult { Ok(MsgRegs), Error(IpcError) }
+pub enum IpcResult {
+    Ok(MsgRegs),
+    Error(IpcError),
+}
 
 #[derive(Clone, Copy, Debug)]
-pub enum IpcError { InvalidCap, WrongCapKind, ReceiverNotReady, MessageTooLong }
+pub enum IpcError {
+    InvalidCap,
+    WrongCapKind,
+    ReceiverNotReady,
+    MessageTooLong,
+}
 
 #[inline]
 pub fn call(ep_cptr: u32, msg: MsgRegs) -> IpcResult {
@@ -22,7 +30,11 @@ pub fn call(ep_cptr: u32, msg: MsgRegs) -> IpcResult {
         Some(_) => return IpcResult::Error(IpcError::WrongCapKind),
         None    => return IpcResult::Error(IpcError::InvalidCap),
     };
-    if cap.rights & 0x02 == 0 { return IpcResult::Error(IpcError::InvalidCap); }
+    
+    if cap.rights & 0x02 == 0 { 
+        return IpcResult::Error(IpcError::InvalidCap); 
+    }
+    
     deliver(cap.object, msg)
 }
 
@@ -30,13 +42,51 @@ pub fn call(ep_cptr: u32, msg: MsgRegs) -> IpcResult {
 pub fn send(ep_cptr: u32, msg: MsgRegs) -> bool {
     match lookup(ep_cptr) {
         Some(c) if c.kind == CapKind::Endpoint && c.rights & 0x02 != 0 => {
-            deliver(c.object, msg); true
+            let _ = deliver(c.object, msg); 
+            true
         }
         _ => false,
     }
 }
 
 #[inline(always)]
-fn deliver(_endpoint_obj: u64, _msg: MsgRegs) -> IpcResult {
-    IpcResult::Ok(MsgRegs::default())
+fn deliver(endpoint_obj: u64, msg: MsgRegs) -> IpcResult {
+    if endpoint_obj == 0 {
+        return IpcResult::Error(IpcError::ReceiverNotReady);
+    }
+
+    let mut out_label: u32;
+    let mut out_w0: u64;
+    let mut out_w1: u64;
+    let mut out_w2: u64;
+
+    unsafe {
+        core::arch::asm!(
+            "mov r11, rcx",
+            "syscall",
+            "mov rcx, r11",
+            in("rdi") endpoint_obj,
+            in("rsi") msg.label,
+            in("rdx") msg.w0,
+            in("r10") msg.w1,
+            in("r8")  msg.w2,
+            lateout("rax") out_label,
+            lateout("rdi") out_w0,
+            lateout("rsi") out_w1,
+            lateout("rdx") out_w2,
+            clobber_mem,
+            options(nostack)
+        );
+    }
+
+    if out_label == u32::MAX {
+        return IpcResult::Error(IpcError::ReceiverNotReady);
+    }
+
+    IpcResult::Ok(MsgRegs {
+        label: out_label,
+        w0: out_w0,
+        w1: out_w1,
+        w2: out_w2,
+    })
 }
